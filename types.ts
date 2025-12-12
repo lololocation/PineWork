@@ -1,8 +1,11 @@
+
 export interface Task {
   id: string;
   text: string;
   completed: boolean;
   createdAt: number;
+  deleted?: boolean; // 软删除标记
+  isPinned?: boolean; // 新增：置顶标记
 }
 
 export type Language = 'en' | 'zh';
@@ -12,7 +15,7 @@ export interface PurchasingItem {
   id: string;
   name: string;
   price: number;
-  emoji: string; 
+  emoji: string;
 }
 
 export interface UserSettings {
@@ -31,11 +34,16 @@ export interface UserSettings {
   themeColor: ThemeColor;
   language: Language;
   purchasingTargetId: string; // ID of the selected item
-  
+
   // New customization fields
   purchasingItems: PurchasingItem[];
   pomodoroDuration: number; // minutes
   customQuote: string; // Custom text for report footer
+  payday: number; // Day of month (1-31)
+
+  // Visual Toggles
+  showTree: boolean;
+  showParticles: boolean;
 }
 
 export interface FocusStats {
@@ -43,10 +51,17 @@ export interface FocusStats {
   minutes: number;
 }
 
+// 新增：每日额外奖金统计
+export interface BonusStats {
+  date: string; // YYYY-MM-DD
+  amount: number; // 当日累计手动添加的金额
+}
+
 export interface AppData {
   settings: UserSettings;
   tasks: Task[];
   focusStats: FocusStats;
+  bonusStats?: BonusStats; // 新增字段
 }
 
 export const DEFAULT_PURCHASING_ITEMS: PurchasingItem[] = [
@@ -73,5 +88,8 @@ export const DEFAULT_SETTINGS: UserSettings = {
   purchasingTargetId: 'coffee',
   purchasingItems: DEFAULT_PURCHASING_ITEMS,
   pomodoroDuration: 25,
-  customQuote: ""
+  customQuote: "",
+  payday: 10, // Default payday
+  showTree: true,
+  showParticles: true
 };
